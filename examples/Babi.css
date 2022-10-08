@@ -1,0 +1,348 @@
+@import url("https://fonts.googleapis.com/css?family=Ms+Madi&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;400&display=swap");
+
+@import url("https://fonts.googleapis.com/css2?family=Corinthia&family=DM+Serif+Display&display=swap");
+
+body {
+  background: linear-gradient(106.96deg, #010104 20.8%, #091620 82.72%);
+  font-family: "Inter", sans-serif;
+  width: 100vw;
+  height: 100vh;
+  color: white;
+}
+
+canvas {
+  display: block;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+}
+
+.head {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+#preco {
+  font-family: "Inter", sans-serif;
+  font-size: 1.5em;
+  margin-right: 50px;
+  margin-top: 30px;
+  padding: 0;
+  text-align: right;
+  padding-right: 28px;
+  padding-bottom: 10px;
+}
+
+#container {
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  z-index: 1;
+  top: 200px;
+  right: 10px;
+  background: linear-gradient(
+    106.96deg,
+    rgba(60, 30, 30, 0.1),
+    rgba(101, 47, 47, 0.2)
+  );
+  width: 400px;
+  height: 77%;
+}
+
+h2 {
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  z-index: 1;
+  top: 135px;
+  right: 10px;
+  width: 400px;
+  height: 43px;
+  /* align to center */
+  justify-content: center;
+  align-items: center;
+  background-color: #01010486;
+  color: #ffffff;
+  font-family: "DM Serif Display";
+  font-weight: 100;
+  font-size: 20px;
+}
+
+.input {
+  margin-top: 20px;
+}
+
+.label {
+  display: flex;
+  flex-direction: column;
+  padding: 0px;
+  margin-top: 20px;
+  margin-left: 5px;
+  margin-right: 5px;
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: lighter;
+  font-size: 12px;
+  line-height: 22px;
+  color: #ffffff;
+  /* uppercase */
+  text-transform: uppercase;
+  text-align: end;
+  width: 200px;
+}
+
+#titulo {
+  font-family: "DM Serif Display";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 30px;
+  color: #ffffff;
+  padding-top: 20px;
+  padding-left: 20px;
+}
+#direita {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: right;
+  width: 300px;
+  height: 100%;
+}
+
+#subtitulo {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 100;
+  font-size: 15px;
+  left: 100px;
+  color: #ffffff;
+  padding-right: 75px;
+  text-align: right;
+}
+
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background: rgba(224, 224, 224, 0.521);
+  border: 0px solid #ffffff;
+  color: white;
+  font-family: "Inter";
+  font-weight: 100;
+  font-size: 15px;
+  text-align: center;
+  width: 60px;
+}
+.resultado {
+  position: absolute;
+  width: 549px;
+  height: 140px;
+  left: 445px;
+  top: 126px;
+
+  background: rgba(101, 47, 47, 0.3);
+}
+
+.resultado > .regiao {
+  position: absolute;
+  width: 92px;
+  height: 15px;
+  left: 10px;
+  top: 1px;
+
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 200;
+  font-size: 12px;
+  line-height: 15px;
+  color: #ffffff;
+}
+
+.resultado > .modelo {
+  position: absolute;
+  width: 300px;
+  height: 79px;
+  left: 30px;
+  top: -20px;
+
+  font-family: "DM Serif Display";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 40px;
+  line-height: 79px;
+
+  color: #ffffff;
+}
+
+h3 {
+  color: #ffffff;
+  font-family: "DM Serif Display";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 40px;
+  line-height: 79px;
+}
+.resultado > .area {
+  position: absolute;
+  width: 300px;
+  height: 79px;
+  left: 30px;
+  top: 30px;
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 22px;
+  line-height: 79px;
+  color: #ffffff;
+}
+
+.preco {
+  position: absolute;
+  width: 222px;
+  height: 60px;
+  left: 305px;
+  top: 90px;
+  margin-bottom: -30px;
+  text-align: right;
+
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 30px;
+  line-height: 36px;
+
+  color: #ffffff;
+}
+
+.botoes {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  width: 549px;
+  height: 390px;
+  left: 445px;
+  top: 266px;
+  background: #ffffff;
+}
+
+.fila1 {
+  display: flex;
+  flex-direction: row;
+}
+
+.botao1 {
+  box-sizing: border-box;
+  width: 365px;
+  height: 78px;
+  background: #1de9e9;
+  border: 1px solid #ffffff;
+}
+
+.botao1 > .selectcidade {
+  width: 369px;
+  height: 78px;
+  background: #e9f5f500;
+  border: 2px solid #ffffff;
+  margin-top: -30px;
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 25px;
+  line-height: 30px;
+  text-align: center;
+  color: #000000;
+}
+
+.botao2 {
+  box-sizing: border-box;
+  width: 183px;
+  height: 78px;
+  background: #43bebe;
+  border: 2px solid #ffffff;
+}
+
+.botao2 > .reset {
+  width: 183px;
+  height: 78px;
+  background: #e9f5f500;
+  padding-top: -30px;
+  padding-left: 40px;
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 25px;
+  line-height: 30px;
+  text-align: center;
+  color: #000000;
+}
+
+.botao3 {
+  background: #e9f5f5;
+  width: 182px;
+  height: 78px;
+}
+
+.botao3 > select {
+  width: 183px;
+  height: 78px;
+  background: #e9f5f500;
+  border: 1px solid #ffffff;
+  margin-top: -30px;
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 25px;
+  line-height: 30px;
+  text-align: center;
+  color: #000000;
+}
+
+.botao4 {
+  background: #e9f5f5;
+  width: 182px;
+  height: 78px;
+}
+
+.botao4 > select {
+  width: 183px;
+  height: 78px;
+  background: #e9f5f500;
+  border: 1px solid #ffffff;
+  margin-top: -30px;
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 30px;
+  text-align: center;
+  color: #000000;
+}
+
+.fila {
+  display: flex;
+  flex-direction: row;
+}
+
+a {
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.link {
+  position: absolute;
+  width: 581px;
+  height: 30px;
+  left: 430px;
+  top: 680px;
+
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 30px;
+  text-align: center;
+  color: #ffffff;
+  text-decoration: none;
+}

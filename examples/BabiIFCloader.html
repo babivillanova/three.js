@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>My Buffer</title>
+		<link rel="shortcut icon" href="../../files/favicon.ico" />
+		<link rel="stylesheet" type="text/css" href="Babi.css" />
+		<script src="https://cdn.rawgit.com/Keyang/node-csvtojson/d41f44aa/browser/csvtojson.min.js"></script>
+	</head>
+	<body>
+		<div id="titulo">Griffon Living</div>
+		<h2>Parâmetros</h2>
+
+		<div id="container">
+			<div class="label">
+				<label for="inA">Desnível do terreno</label>
+				<label for="inB">Profundidade do terreno</label>
+				<label for="inC">Altura da casa</label>
+				<label for="inD">Recuo frontal</label>
+				<label for="inE">Recuo lateral</label>
+			</div>
+			<div class="input">
+				<form>
+					<div id="slider">
+						<input
+							class="bar"
+							type="range"
+							id="inA"
+							min="2.5"
+							max="10"
+							value="6"
+							step="0.5"
+							onchange="outA.value=value"
+						/>
+						<span class="highlight"></span>
+						<output id="outA">6</output>
+					</div>
+				</form>
+				<form>
+					<div id="slider">
+						<input
+							class="bar"
+							type="range"
+							id="inB"
+							min="34"
+							max="45"
+							value="37"
+							step="0.1"
+							onchange="outA.value=value"
+						/>
+						<span class="highlight"></span>
+						<output id="outA">37</output>
+					</div>
+				</form>
+				<form>
+					<div id="slider">
+						<input
+							class="bar"
+							type="range"
+							id="inC"
+							min="2.5"
+							max="7"
+							value="3.5"
+							step="0.1"
+							onchange="outC.value=value"
+						/>
+						<span class="highlight"></span>
+						<output id="outC">3.5</output>
+					</div>
+				</form>
+				<form>
+					<div id="slider">
+						<input
+							class="bar"
+							type="range"
+							id="inD"
+							min="2"
+							max="7"
+							value="5"
+							step="0.5"
+							onchange="outD.value=value"
+						/>
+						<span class="highlight"></span>
+						<output id="outD">5</output>
+					</div>
+				</form>
+				<form>
+					<div id="slider">
+						<input
+							class="bar"
+							type="range"
+							id="inE"
+							min="0.5"
+							max="4"
+							value="1.5"
+							step="0.5"
+							onchange="outE.value=value"
+						/>
+						<span class="highlight"></span>
+						<output id="outE">1.5</output>
+					</div>
+				</form>
+			</div>
+		</div>
+		<script
+			async
+			src="https://unpkg.com/es-module-shims@1.3.6/dist/es-module-shims.js"
+		></script>
+
+		<script type="importmap">
+			{
+				"imports": {
+					"three": "../build/three.module.js",
+					"three/addons/": "../../examples/jsm/"
+				}
+			}
+		</script>
+
+		<script type="module">
+			import * as THREE from "three";
+			import {
+				BoxGeometry,
+				BufferGeometry,
+				CapsuleGeometry,
+				CircleGeometry,
+				Color,
+				ConeGeometry,
+				Curve,
+				CylinderGeometry,
+				DodecahedronGeometry,
+				DoubleSide,
+				ExtrudeGeometry,
+				Float32BufferAttribute,
+				Group,
+				IcosahedronGeometry,
+				LatheGeometry,
+				LineSegments,
+				LineBasicMaterial,
+				Mesh,
+				MeshPhongMaterial,
+				OctahedronGeometry,
+				PerspectiveCamera,
+				PlaneGeometry,
+				PlaneBufferGeometry,
+				PointLight,
+				RingGeometry,
+				Scene,
+				Shape,
+				ShapeGeometry,
+				SphereGeometry,
+				TetrahedronGeometry,
+				TorusGeometry,
+				TorusKnotGeometry,
+				TubeGeometry,
+				Vector2,
+				Vector3,
+				WireframeGeometry,
+				WebGLRenderer,
+				BufferAttribute,
+				TextureLoader,
+				RepeatWrapping,
+			} from "three";
+
+			import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+
+			import { IFCLoader } from "three/addons/loaders/IFCLoader.js";
+
+			let mesh, model; //modelo da casa
+			let camera, scene, renderer, geometry, orbit;
+			let geometries = [];
+			let verticesS = [];
+			let meshs = [];
+			//create new Vector3 named modelPosition
+			let modelA = 4.8;
+			let modelB = 1.2;
+			let modelC = 1;
+
+			let alturaCasa = 3.5; //tem slider
+			let profundidadeTerreno = 37; //tem slider
+			let desnivelTerreno = 6; //tem slider
+			let recuoFrontal = 5;
+			let recuoLateral = 1;
+			let fundodaCasa = recuoFrontal + 28.38;
+			let larguraMorro = 3.3 + recuoLateral;
+			console.log(fundodaCasa);
+			let sizeS = [];
+			function setSizeS() {
+				sizeS = [
+					[0, 0, 0, -15, 0, 0, 0, desnivelTerreno, profundidadeTerreno], //a, b d terreno vizinho esquerda
+					[
+						-15,
+						0,
+						0,
+						0,
+						desnivelTerreno,
+						profundidadeTerreno,
+						-15,
+						desnivelTerreno,
+						profundidadeTerreno,
+					],
+					[larguraMorro, 0, 0, 0, 0, 0, larguraMorro, alturaCasa, recuoFrontal], // abd jardim morro
+					[
+						0,
+						0,
+						0,
+						larguraMorro,
+						alturaCasa,
+						recuoFrontal,
+						0,
+						alturaCasa,
+						recuoFrontal,
+					], //bdc
+					[
+						0,
+						alturaCasa,
+						recuoFrontal,
+						recuoLateral,
+						alturaCasa,
+						recuoFrontal,
+						recuoLateral,
+						alturaCasa,
+						fundodaCasa,
+					],
+					[
+						0,
+						alturaCasa,
+						recuoFrontal,
+						recuoLateral,
+						alturaCasa,
+						fundodaCasa,
+						0,
+						alturaCasa,
+						fundodaCasa,
+					],
+					[
+						0,
+						0,
+						0,
+						//
+						0,
+						alturaCasa,
+						fundodaCasa,
+						0,
+						alturaCasa,
+						recuoFrontal,
+					], //preenchimento lateral 1
+					[
+						0,
+						0,
+						0,
+						0,
+						alturaCasa,
+						fundodaCasa,
+						0,
+						desnivelTerreno,
+						profundidadeTerreno,
+					],
+				];
+			}
+
+			const material = new MeshPhongMaterial({
+				color: "#39542e",
+				flatShading: true,
+				side: DoubleSide,
+			});
+
+			//add loaded shader material
+
+			let sliderA = document.getElementById("inA");
+			let sliderB = document.getElementById("inB");
+			let sliderC = document.getElementById("inC");
+			let sliderD = document.getElementById("inD");
+			let sliderE = document.getElementById("inE");
+			setSizeS();
+			sliderA.oninput = function () {
+				for (let i = 0; i < sizeS.length; i++) {
+					scene.remove(meshs[i]);
+					sizeS[0][7] = this.value;
+					sizeS[1][7] = this.value;
+					sizeS[1][4] = this.value;
+					geometries[i] = new BufferGeometry();
+					verticesS[i] = new Float32Array(sizeS[i]);
+					geometries[i].setAttribute(
+						"position",
+						new BufferAttribute(verticesS[i], 3)
+					);
+					meshs[i] = new Mesh(geometries[i], material);
+					scene.add(meshs[i]);
+				}
+				render();
+			};
+
+			sliderB.oninput = function () {
+				for (let i = 0; i < sizeS.length; i++) {
+					scene.remove(meshs[i]);
+					sizeS[0][8] = this.value;
+					sizeS[1][8] = this.value;
+					sizeS[1][5] = this.value;
+					geometries[i] = new BufferGeometry();
+					verticesS[i] = new Float32Array(sizeS[i]);
+					geometries[i].setAttribute(
+						"position",
+						new BufferAttribute(verticesS[i], 3)
+					);
+					meshs[i] = new Mesh(geometries[i], material);
+					scene.add(meshs[i]);
+				}
+				render();
+			};
+
+			sliderC.oninput = function () {
+				for (let i = 0; i < sizeS.length; i++) {
+					scene.remove(meshs[i]);
+					scene.remove(mesh);
+					alturaCasa = this.value;
+					setSizeS();
+					geometries[i] = new BufferGeometry();
+					verticesS[i] = new Float32Array(sizeS[i]);
+					geometries[i].setAttribute(
+						"position",
+						new BufferAttribute(verticesS[i], 3)
+					);
+					meshs[i] = new Mesh(geometries[i], material);
+					scene.add(meshs[i]);
+				}
+				render();
+			};
+			sliderD.oninput = function () {
+				for (let i = 0; i < sizeS.length; i++) {
+					scene.remove(meshs[i]);
+					recuoFrontal = this.value;
+					fundodaCasa = parseFloat(this.value) + parseFloat(28.38);
+					setSizeS();
+					geometries[i] = new BufferGeometry();
+					verticesS[i] = new Float32Array(sizeS[i]);
+					geometries[i].setAttribute(
+						"position",
+						new BufferAttribute(verticesS[i], 3)
+					);
+					meshs[i] = new Mesh(geometries[i], material);
+					scene.add(meshs[i]);
+				}
+				render();
+			};
+
+			sliderE.oninput = function () {
+				for (let i = 0; i < sizeS.length; i++) {
+					scene.remove(meshs[i]);
+					recuoLateral = this.value;
+					larguraMorro = parseFloat(this.value) + parseFloat(3.3);
+					setSizeS();
+					geometries[i] = new BufferGeometry();
+					verticesS[i] = new Float32Array(sizeS[i]);
+					geometries[i].setAttribute(
+						"position",
+						new BufferAttribute(verticesS[i], 3)
+					);
+					meshs[i] = new Mesh(geometries[i], material);
+					scene.add(meshs[i]);
+					console.log(larguraMorro);
+				}
+				render();
+			};
+
+			init();
+			render();
+
+			function init() {
+				scene = new Scene();
+				//				scene.background = new Color(0x000000);
+
+				camera = new PerspectiveCamera(
+					75,
+					window.innerWidth / window.innerHeight,
+					0.1,
+					500
+				);
+				camera.position.z = -30;
+				camera.position.x = 10;
+				camera.position.y = 10;
+
+				const lights = [];
+				lights[0] = new PointLight(0xffffff, 1, 0);
+				lights[1] = new PointLight(0xffffff, 1, 0);
+				lights[2] = new PointLight(0xffffff, 1, 0);
+				lights[0].position.set(0, 200, 0);
+				lights[1].position.set(100, 200, 100);
+				lights[2].position.set(-100, -200, -100);
+				scene.add(lights[0]);
+				scene.add(lights[1]);
+				scene.add(lights[2]);
+
+				//Setup IFC Loader
+				const ifcLoader = new IFCLoader();
+				ifcLoader.ifcManager.setWasmPath("jsm/loaders/ifc/");
+				ifcLoader.load(
+					// "models/ifc/rac_advanced_sample_project.ifc",
+					"models/ifc/CarbonParaIFC3.ifc",
+					function (model) {
+						//set position of model
+						model.position.set(modelA, modelB, modelC);
+						scene.add(model.mesh);
+						render();
+					}
+				);
+				// model = new ifcLoader.load("models/ifc/CarbonParaIFC3.ifc");
+				// model.position.set(modelA, modelB, modelC);
+				// scene.add(model.mesh);
+
+				//Renderer
+				renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+				renderer.setClearColor(0x000000, 0); // the default
+
+				renderer.setSize(window.innerWidth, window.innerHeight);
+				renderer.setPixelRatio(window.devicePixelRatio);
+				document.body.appendChild(renderer.domElement);
+
+				//Controls
+				const controls = new OrbitControls(camera, renderer.domElement);
+				controls.addEventListener("change", render);
+
+				window.addEventListener("resize", onWindowResize);
+
+				for (let i = 0; i < sizeS.length; i++) {
+					geometries[i] = new BufferGeometry();
+					verticesS[i] = new Float32Array(sizeS[i]);
+					geometries[i].setAttribute(
+						"position",
+						new BufferAttribute(verticesS[i], 3)
+					);
+					meshs[i] = new Mesh(geometries[i], material);
+					scene.add(meshs[i]);
+				}
+
+				render();
+			}
+
+			function onWindowResize() {
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+				renderer.setSize(window.innerWidth, window.innerHeight);
+
+				render();
+			}
+
+			function render() {
+				// setTimeout(function () {
+				// 	requestAnimationFrame(render);
+				// 	renderer.render(scene, camera);
+				// }, 5000 / 60);
+				renderer.render(scene, camera);
+			}
+		</script>
+
+		<script>
+			csv({
+				output: "csv",
+			});
+			const url =
+				"https://docs.google.com/spreadsheets/d/1lTZpSuPc0hgY5xglxDV5K92Bzd97ta6OiBWuW79mkJk/export?format=csv";
+
+			fetch(url)
+				.then((result) => result.text())
+				.then(function (csvtext) {
+					return csv().fromString(csvtext);
+				})
+				.then(function (result) {
+					dados = result.map((item) => {
+						return {
+							P: item.P,
+							M: item.M,
+							G: item.G,
+							CHASSIf: item.CHASSIf,
+							ACABAMENTOf: item.ACABAMENTOf,
+							CHASSIc: item.CHASSIc,
+							ACABAMENTOc: item.ACABAMENTOc,
+						};
+					});
+					console.log(dados);
+				});
+		</script>
+	</body>
+</html>
