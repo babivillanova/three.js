@@ -3,8 +3,22 @@
 
 @import url("https://fonts.googleapis.com/css2?family=Corinthia&family=DM+Serif+Display&display=swap");
 
+html,
 body {
+  height: 100%;
+}
+
+html {
+  display: table;
+  margin: auto;
+  width: 100%;
   background: linear-gradient(106.96deg, #010104 20.8%, #091620 82.72%);
+}
+
+body {
+}
+
+body {
   font-family: "Inter", sans-serif;
   width: 100vw;
   height: 100vh;
@@ -22,13 +36,16 @@ canvas {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  margin-left: 14vw;
+  margin-right: 0
+  margin-top: 20px;
 }
 
 #preco {
   font-family: "Inter", sans-serif;
   font-size: 1.5em;
   margin-right: 50px;
-  margin-top: 30px;
+  margin-top: 100px;
   padding: 0;
   text-align: right;
   padding-right: 28px;
@@ -40,7 +57,7 @@ canvas {
   display: flex;
   flex-direction: row;
   z-index: 1;
-  top: 200px;
+  top: 250px;
   right: 10px;
   background: linear-gradient(
     106.96deg,
@@ -56,7 +73,7 @@ h2 {
   display: flex;
   flex-direction: row;
   z-index: 1;
-  top: 135px;
+  top: 185px;
   right: 10px;
   width: 400px;
   height: 43px;
@@ -101,6 +118,7 @@ h2 {
   color: #ffffff;
   padding-top: 20px;
   padding-left: 20px;
+  cursor: pointer;
 }
 #direita {
   display: flex;
@@ -134,6 +152,7 @@ select {
   font-size: 15px;
   text-align: center;
   width: 60px;
+  cursor: pointer;
 }
 .resultado {
   position: absolute;

@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>My Buffer</title>
+		<title>Griffon Living | Simulador</title>
 		<!-- <link rel="shortcut icon" href="../../files/favicon.ico" /> -->
 		<link rel="stylesheet" type="text/css" href="Babi.css" />
 		<script src="https://cdn.rawgit.com/Keyang/node-csvtojson/d41f44aa/browser/csvtojson.min.js"></script>
@@ -10,7 +10,12 @@
 	<body>
 		<div class="head">
 			<div>
-				<div id="titulo">Griffon Living</div>
+				<!-- <div id="titulo">Griffon Living</div> -->
+				<img
+					id="titulo"
+					onclick="window.open('http://www.griffonliving.com', '_blank')"
+					src="https://cdn.lugc.link/2236a0e0-de23-45c6-8206-6f3b7c7e25a4/-/preview/-/stretch/off/-/format/auto/-/quality/normal/-/resize/150x/"
+				/>
 			</div>
 			<div id="direita">
 				<main id="preco">R$ 800</main>
@@ -39,7 +44,7 @@
 		<div id="container">
 			<div class="label">
 				<label for="inA">Desnível do terreno</label>
-				<label for="inC">Altura da casa</label>
+				<label for="inC">Altura da calçada até a casa</label>
 				<label for="inD">Recuo frontal</label>
 				<label for="inE">Recuo lateral</label>
 				<label for="inB">Profundidade do terreno</label>
@@ -116,7 +121,7 @@
 							class="bar"
 							type="range"
 							id="inB"
-							min="34"
+							min="32"
 							max="45"
 							value="37"
 							step="0.1"
@@ -147,7 +152,6 @@
 			import {
 				BoxGeometry,
 				BufferGeometry,
-				CapsuleGeometry,
 				CircleGeometry,
 				Color,
 				ConeGeometry,
@@ -210,7 +214,7 @@
 			let recuoFrontal = 5;
 			let profundidadeTerreno = 37 - recuoFrontal;
 			let recuoLateral = 1;
-			let fundodaCasa = 28.38;
+			let fundodaCasa = 27;
 			let larguraMorro = 3.7;
 			let larguraFrente = 7.3;
 			let sizeS = [];
@@ -540,7 +544,7 @@
 					});
 				}
 				if (modelo.value == "4S") {
-					ifcLoader.load("models/ifc/CarbonParaIFC4.ifc", function (object) {
+					ifcLoader.load("models/ifc/4S.ifc", function (object) {
 						CASA = object;
 						scene.add(CASA);
 					});
@@ -699,9 +703,9 @@
 				// ifcLoader.ifcManager.setWasmPath("jsm/loaders/ifc/");
 				// console.log(modelo.value);
 
-				ifcLoader.load("models/ifc/CarbonParaIFC4.ifc", function (model) {
+				ifcLoader.load("models/ifc/3S.ifc", function (model) {
 					model.position.set(modelA, modelB, modelC);
-					model.rotation.set(0, -0.032, 0);
+					model.rotation.set(0, 0, 0);
 					CASA = model.mesh;
 					scene.add(CASA);
 					render();
