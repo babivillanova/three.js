@@ -678,6 +678,9 @@
 			function init() {
 				scene = new Scene();
 				//				scene.background = new Color(0x000000);
+				const near = 0;
+				const far = 70;
+				scene.fog = new THREE.Fog(0xffffff, near, far);
 
 				camera = new PerspectiveCamera(
 					75,
@@ -727,10 +730,10 @@
 				//Controls
 				const controls = new OrbitControls(camera, renderer.domElement);
 				controls.addEventListener("change", render);
-				controls.addEventListener("change", function () {
-					console.log(camera.position);
-					console.log(camera.rotation);
-				});
+				// controls.addEventListener("change", function () {
+				// 	console.log(camera.position);
+				// 	console.log(camera.rotation);
+				// });
 
 				window.addEventListener("resize", onWindowResize);
 
